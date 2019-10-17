@@ -1,0 +1,31 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# vagrant rsync-auto
+# set VAGRANT_LOG=warn
+
+VAGRANTFILE_API_VERSION = "2"
+  HOSTNAME = "bastion"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "centos/7"
+  config.vm.hostname = HOSTNAME
+
+  config.vm.provider :virtualbox do |vb|
+    #vb.gui = true
+    #vb.name = HOSTNAME
+    vb.memory = 1024
+    vb.cpus = 2
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+    vb.customize ["modifyvm", :id, "--description", "bastion environment"]
+    vb.customize ["modifyvm", :id, "--cpuexecutioncap", "80"]
+  end
+
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.provision "shell", inline: "bootstrap-template.sh"
+  #config.vm.provision "shell", path: "bootstrap-template"
+  #config.vm.provision "shell", inline: "su - vagrant -c 'bootstrap-template'"
+
+end
