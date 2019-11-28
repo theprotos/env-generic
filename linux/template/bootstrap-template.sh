@@ -73,9 +73,9 @@ bin_install_zip $tflint tflint
 bin_install_zip $vault vault
 
 printf "    ========[ Install $helm ]========"
-curl -sfLo $helm ~/helm.tar.gz
-tar -xvf ~/helm.tar.gz -d ~ && rm -f ~/helm.tar.gz
-mv ~/linux-amd64/helm /usr/bin/
+curl -sfLo $helm /tmp/helm.tar.gz
+tar -xvf /tmp/helm.tar.gz -d /tmp && rm -f /tmp/helm.tar.gz
+mv /tmp/linux-amd64/helm /usr/bin/
 chmod a+x /usr/bin/helm
 
 curl -fLo /usr/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm && chmod a+x /usr/bin/yadm
