@@ -1,1 +1,1 @@
-Get-ChildItem -Path * -Recurse -filter .vagrant | Remove-Item -force -recurse
+Get-ChildItem -Path * -Recurse -filter .vagrant | Remove-Item -force -recurse -ErrorAction SilentlyContinue
