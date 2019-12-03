@@ -38,6 +38,7 @@ function Build-Packer() {
     packer build --force -only=virtualbox-iso  $config
 }
 
+# Init
 cd template
 try {
     Build-Packer ".\win10workstation.json"

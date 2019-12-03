@@ -8,9 +8,8 @@ awsvault="https://github.com/99designs/aws-vault/releases/latest/download/aws-va
 direnv="https://github.com/direnv/direnv/releases/latest/download/direnv.linux-amd64"
 vault="https://releases.hashicorp.com/vault/1.1.5/vault_1.1.5_linux_amd64.zip"
 helm="https://get.helm.sh/helm-v3.0.0-linux-amd64.tar.gz"
+minikube="https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64"
 #####################################################
-
-#/usr/local/bin/yadm
 
 printf "    ========[ MOTD: Update ]========\n"
 printf "Applied from /vagrant/bootstrap-template.sh\n" > /etc/motd
@@ -21,18 +20,22 @@ printf "\nexport AWS_ACCESS_KEY_ID=\t  export client_id=" >> /etc/motd
 printf "\nexport AWS_SECRET_ACCESS_KEY=\t  export client_secret=" >> /etc/motd
 printf "\nexport AWS_DEFAULT_REGION=\t  export tenant_id=" >> /etc/motd
 printf "\n\t\t\t\t  export subscription_id\n" >> /etc/motd
+printf "\n\nsudo yum groupinstall -y 'X Window System'" >> /etc/motd
+printf "\nsudo yum install gnome-classic-session gnome-terminal nautilus-open-terminal control-center liberation-mono-fonts chrome-gnome-shell firefox" >> /etc/motd
+
 
 printf "    ========[ SSH: allow password ]========"
 sed -i "/^[^#]*PasswordAuthentication[[:space:]]no/c\PasswordAuthentication yes" /etc/ssh/sshd_config
 service sshd restart
 
 echo "fs.inotify.max_user_watches=524288" | sudo tee -a /etc/sysctl.conf
-echo "$usr ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
+echo "vagrant ALL=(ALL) NOPASSWD: ALL" | sudo tee -a
 
 printf "    ========[ YUM: Install common packages ]========"
-yum install -y -q -e 0 epel-release
+curl -s https://raw.githubusercontent.com/theprotos/cookbooks-generic/master/scripts/linux.sh | sudo bash /dev/stdin linux-packages.json
+#yum install -y -q -e 0 epel-release
 yum update -y -q -e 0
-yum install -y -q -e 0 yum-utils jq net-tools unzip tar curl kernel-devel awscli sshuttle htop git mc nano ansible golang bash-completion
+yum install -y -q -e 0 sshuttle htop git mc nano ansible golang bash-completion
 
 printf "    ========[ YUM: Install and configure Docker ]========"
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -57,6 +60,7 @@ function bin_install {
 bin_install $tfdocs terraform-docs
 bin_install $awsvault aws-vault
 bin_install $direnv direnv
+bin_install $minikube minikube
 
 function bin_install_zip {
     printf "    ========[ Install $1 ]========"
@@ -73,9 +77,11 @@ bin_install_zip $tflint tflint
 bin_install_zip $vault vault
 
 printf "    ========[ Install $helm ]========"
-curl -sfLo $helm /tmp/helm.tar.gz
+curl -s $helm  -J -L --output /tmp/helm.tar.gz
 tar -xvf /tmp/helm.tar.gz -d /tmp && rm -f /tmp/helm.tar.gz
 mv /tmp/linux-amd64/helm /usr/bin/
 chmod a+x /usr/bin/helm
 
 curl -fLo /usr/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm && chmod a+x /usr/bin/yadm
+
+exit 0

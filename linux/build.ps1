@@ -34,10 +34,12 @@ function Vagrant-Cleanup
     Remove-Item -force -recurse -ErrorAction SilentlyContinue package.box
 }
 
+# Init
 Write-Host "$( Get-Date -Format 'yyyy-MM-dd HH:mm' ) ========[ Vagrant: STARTED ]========"
 cd template
 try
 {
+    Vagrant-Cleanup
     vagrant up
     Vagrant-Package
 }
