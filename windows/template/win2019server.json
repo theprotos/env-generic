@@ -1,12 +1,12 @@
 {
   "variables": {
     "artifacts_path": "boxes",
-    "iso_checksum": "34887592ECC25B725A527748D31971F22C78C82B",
-    "iso_path": "E:\\home\\downloads\\windows\\windows10.iso",
+    "iso_checksum": "520948cc11701f2eeb3da65fd55a2e033edd4662",
+    "iso_path": "E:\\home\\downloads\\windows\\windows2019.iso",
     "guest_additions_mode": "attach",
     "headless": "false",
-    "autounattend": "answer_files/win10ent/Autounattend.xml",
-    "template": "windows-10",
+    "autounattend": "answer_files/win2019standard/Autounattend.xml",
+    "template": "windows-2019-standard",
     "memory_size": "4096",
     "cpu_cores": "1"
   },
@@ -90,7 +90,7 @@
       ],
       "guest_additions_mode": "{{ user `guest_additions_mode` }}",
       "guest_additions_path": "C:/users/vagrant/VBoxGuestAdditions.iso",
-      "guest_os_type": "Windows10_64",
+      "guest_os_type": "Windows2019_64",
       "hard_drive_interface": "sata",
       "headless": "{{ user `headless` }}",
       "iso_url": "{{ user `iso_path` }}",

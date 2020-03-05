@@ -29,17 +29,36 @@ ssh vagrant@host
 ```
 "autounattend": "answer_files/win10ent/Autounattend.xml",
 "iso_checksum": "34887592ECC25B725A527748D31971F22C78C82B",
-"iso_path"="D:\\home\\downloads\\windows10\\windows11.iso"
+"iso_path"="D:\\home\\downloads\\windows10\\windows10.iso"
 ```
 
 - Manual run
 
 ```
 packer build --force -on-error=abort -only=virtualbox-iso  .\win10workstation.json
-packer build  -only=virtualbox-iso -var 'iso_path=D:\\home\\downloads\\windows10\\windows11.iso' -var 'iso_checksum=34887592ECC25B725A527748D31971F22C78C82B' .\win10workstation.json
+packer build  -only=virtualbox-iso -var 'iso_path=D:\\home\\downloads\\windows10\\windows10.iso' -var 'iso_checksum=34887592ECC25B725A527748D31971F22C78C82B' .\win10workstation.json
 ```
 
 - Automated run [build.ps1](windows/template/build.ps1)
+
+### Packer: Build image win2019server.json
+
+- Update below parameters in [win2019server.json](windows/template/win2019server.json)
+
+```
+"autounattend": "answer_files/win2019standard/Autounattend.xml",
+"iso_checksum": "520948cc11701f2eeb3da65fd55a2e033edd4662",
+"iso_path"="D:\\home\\downloads\\windows10\\windows2019.iso"
+```
+
+- Manual run
+
+```
+packer build --force -on-error=abort -only=virtualbox-iso  .\win2019server.json
+packer build  -only=virtualbox-iso -var 'iso_path=D:\\home\\downloads\\windows10\\windows2019.iso' -var 'iso_checksum=520948cc11701f2eeb3da65fd55a2e033edd4662' .\win2019server.json
+```
+
+- Automated run [build-server.ps1](windows/template/build-server.ps1)
 
 
 # REF

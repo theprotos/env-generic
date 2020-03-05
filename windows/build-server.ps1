@@ -1,6 +1,6 @@
 $version = Get-Date -Format "yyyy.MMdd.HHmm"
 $metadata = "{
-    ""name"": ""windows-10-generic"",
+    ""name"": ""windows-2019-generic"",
     ""description"": ""Windows generic box with preinstalled packages"",
     ""versions"": [{
         ""version"": ""$version"",
@@ -31,7 +31,7 @@ function Add-Vagrant() {
 function Build-Packer() {
     param(
         [String]
-        $config = ".\win10workstation.json"
+        $config = ".\win2019server.json"
     )
 
     Write-Host "$( Get-Date -Format 'yyyy-MM-dd HH:mm' ) ========[ Packer: STARTED ]========"
@@ -41,7 +41,7 @@ function Build-Packer() {
 # Init
 cd template
 try {
-    Build-Packer ".\win10workstation.json"
+    Build-Packer ".\win2019server.json"
     Add-Vagrant
 
 }
