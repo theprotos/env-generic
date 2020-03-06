@@ -8,7 +8,9 @@
     "autounattend": "answer_files/win10ent/Autounattend.xml",
     "template": "windows-10",
     "memory_size": "4096",
-    "cpu_cores": "1"
+    "cpu_cores": "2",
+    "disk_size": "61440",
+    "ps_provisioner": ". { iwr -useb https://raw.githubusercontent.com/theprotos/cookbooks-generic/development/scripts/win.ps1 } | iex; apply-runlist -runlist win-vm-minimal.json -branch development"
   },
   "builders": [
     {
@@ -39,68 +41,36 @@
     {
       "type": "virtualbox-iso",
       "vboxmanage": [
-        [
-          "setextradata",
-          "{{.Name}}",
-          "GUI/HidLedsSync",
-          "1"
-        ],
-        [
-          "modifyvm",
-          "{{.Name}}",
-          "--memory",
-          "{{ user `memory_size` }}"
-        ],
-        [
-          "modifyvm",
-          "{{.Name}}",
-          "--vram",
-          "128"
-        ],
-        [
-          "modifyvm",
-          "{{.Name}}",
-          "--cpus",
-          "{{ user `cpu_cores` }}"
-        ],
-        [
-          "modifyvm",
-          "{{.Name}}",
-          "--audio",
-          "none"
-        ],
-        [
-          "modifyvm",
-          "{{.Name}}",
-          "--clipboard-mode",
-          "bidirectional"
-        ],
-        [
-          "modifyvm",
-          "{{.Name}}",
-          "--draganddrop",
-          "bidirectional"
-        ],
-        [
-          "modifyvm",
-          "{{.Name}}",
-          "--nested-hw-virt",
-          "on"
-        ]
+        ["storagectl", "{{.Name}}", "--name", "IDE Controller", "--remove"],
+        ["setextradata", "{{.Name}}", "GUI/HidLedsSync", "1"],
+        ["modifyvm", "{{.Name}}", "--vrde", "off"],
+        ["modifyvm", "{{.Name}}", "--graphicscontroller", "vboxsvga"],
+        ["modifyvm", "{{.Name}}", "--vram", "128"],
+        ["modifyvm", "{{.Name}}", "--accelerate3d", "on"],
+        ["modifyvm", "{{.Name}}", "--usb", "on"],
+        ["modifyvm", "{{.Name}}", "--mouse", "usbtablet"],
+        ["modifyvm", "{{.Name}}", "--audio", "none"],
+        ["modifyvm", "{{.Name}}", "--clipboard-mode", "bidirectional"],
+        ["modifyvm", "{{.Name}}", "--draganddrop", "bidirectional"],
+        ["modifyvm", "{{.Name}}", "--nested-hw-virt", "on"]
       ],
+      "cpus": "{{ user `cpu_cores` }}",
+      "memory": "{{ user `memory_size` }}",
       "guest_additions_mode": "{{ user `guest_additions_mode` }}",
-      "guest_additions_path": "C:/users/vagrant/VBoxGuestAdditions.iso",
+      "guest_additions_interface": "sata",
       "guest_os_type": "Windows10_64",
+      "disk_size": "{{user `disk_size`}}",
       "hard_drive_interface": "sata",
       "headless": "{{ user `headless` }}",
       "iso_url": "{{ user `iso_path` }}",
       "iso_checksum": "{{ user `iso_checksum` }}",
       "iso_checksum_type": "sha1",
+      "iso_interface": "sata",
       "output_directory": "{{user `artifacts_path`}}/packer-{{user `template`}}-virtualbox",
       "communicator": "winrm",
       "winrm_username": "vagrant",
       "winrm_password": "vagrant",
-      "winrm_timeout": "12h",
+      "winrm_timeout": "4h",
       "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
       "shutdown_timeout": "15m",
       "floppy_files": [
@@ -112,7 +82,7 @@
   "provisioners": [
     {
       "type": "powershell",
-      "inline": [". { iwr -useb https://raw.githubusercontent.com/theprotos/cookbooks-generic/master/scripts/win.ps1 } | iex; apply-runlist -runlist win-vm-minimal.json"],
+      "inline": ["{{user `ps_provisioner`}}"],
       "elevated_user": "vagrant",
       "elevated_password": "vagrant",
       "valid_exit_codes": [ 0, 1 ]

@@ -35,7 +35,7 @@ function Build-Packer() {
     )
 
     Write-Host "$( Get-Date -Format 'yyyy-MM-dd HH:mm' ) ========[ Packer: STARTED ]========"
-    packer build --force -only=virtualbox-iso  $config
+    packer build --force -only=virtualbox-iso $config
 }
 
 # Init
