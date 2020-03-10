@@ -1,4 +1,4 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "windows-2019-generic"
+  config.vm.box = "win-2019-1909"
   config.vm.network "private_network", ip: "192.168.100.110"
 end

@@ -20,46 +20,32 @@ ssh vagrant@host
 ## Windows
 
 - See initial script [base_setup.ps1](windows/template/scripts/base_setup.ps1)
-- [These](https://github.com/theprotos/cookbooks-generic.git) Windows Chef cookbooks will applied, see [apply-cookbooks.ps1](windows/template/scripts/apply-cookbooks.ps1)
+- [Windows Chef cookbooks](https://github.com/theprotos/cookbooks-generic.git) will applied, see [apply-cookbooks.ps1](windows/template/scripts/apply-cookbooks.ps1)
 
-### Packer: Build image win10workstation.json
+### Packer: create image
 
-- Update below parameters in [win10workstation.json](windows/template/win10workstation.json)
-
+- Update below parameters in respective windows/template/*.json  
 ```
 "autounattend": "answer_files/win10ent/Autounattend.xml",
 "iso_checksum": "34887592ECC25B725A527748D31971F22C78C82B",
 "iso_path"="D:\\home\\downloads\\windows10\\windows10.iso"
 ```
 
-- Manual run
-
+- [OPTION 1] Manual run  
 ```
-packer build --force -on-error=abort -only=virtualbox-iso  .\win10workstation.json
-packer build  -only=virtualbox-iso -var 'iso_path=D:\\home\\downloads\\windows10\\windows10.iso' -var 'iso_checksum=34887592ECC25B725A527748D31971F22C78C82B' .\win10workstation.json
-```
-
-- Automated run [build.ps1](windows/template/build.ps1)
-
-### Packer: Build image win2019server.json
-
-- Update below parameters in [win2019server.json](windows/template/win2019server.json)
-
-```
-"autounattend": "answer_files/win2019standard/Autounattend.xml",
-"iso_checksum": "520948cc11701f2eeb3da65fd55a2e033edd4662",
-"iso_path"="D:\\home\\downloads\\windows10\\windows2019.iso"
+packer build --force -on-error=abort -only=virtualbox-iso  .\win-10-1903.json
+packer build  -only=virtualbox-iso -var 'iso_path=D:\\home\\downloads\\windows10\\windows10.iso' -var 'iso_checksum=34887592ECC25B725A527748D31971F22C78C82B' .\win-10-1903.json
 ```
 
-- Manual run
+- [OPTION 2] Automated run [build.ps1](windows/template/build.ps1)
 
 ```
-packer build --force -on-error=abort -only=virtualbox-iso  .\win2019server.json
-packer build  -only=virtualbox-iso -var 'iso_path=D:\\home\\downloads\\windows10\\windows2019.iso' -var 'iso_checksum=520948cc11701f2eeb3da65fd55a2e033edd4662' .\win2019server.json
+# Run below to get help
+.\build.ps1 -help
+
+.\build.ps1 -imageVersion 1.2.3.4 -packerConfig .\template\win10workstation.json -imageName win-2019 -imageDescription 'basic win image'
+
 ```
-
-- Automated run [build-server.ps1](windows/template/build-server.ps1)
-
 
 # REF
 
