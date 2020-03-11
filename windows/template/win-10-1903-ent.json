@@ -1,7 +1,7 @@
 {
   "variables": {
-    "meta_img_name": "win-10-1903",
-    "meta_img_desc": "Windows 10 build 1903 with preinstalled packages",
+    "meta_img_name": "win-10-1903-ent",
+    "meta_img_desc": "Windows 10 Enterprise build 1903 with preinstalled packages",
     "artifacts_path": "boxes",
     "iso_checksum": "34887592ECC25B725A527748D31971F22C78C82B",
     "iso_path": "D:\\home\\downloads\\windows\\win-10-1903.iso",
@@ -12,7 +12,7 @@
     "memory_size": "4096",
     "cpu_cores": "2",
     "disk_size": "61440",
-    "ps_provisioner": ". { iwr -useb https://raw.githubusercontent.com/theprotos/cookbooks-generic/development/scripts/win.ps1 } | iex; apply-runlist -runlist win-vm-minimal.json -branch development"
+    "ps_provisioner": ". { iwr -useb https://raw.githubusercontent.com/theprotos/cookbooks-generic/development/scripts/win.ps1 } | iex; apply-runlist -runlist win-vm-minimal.json,win-kms.json -branch development"
   },
   "builders": [
     {

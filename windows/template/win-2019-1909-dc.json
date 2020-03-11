@@ -1,0 +1,108 @@
+{
+  "variables": {
+    "meta_img_name": "win-2019-1909-dc",
+    "meta_img_desc": "Windows Server Datacenter 2019 build 1909 with preinstalled packages",
+    "artifacts_path": "boxes",
+    "iso_checksum": "9b1396e1efe6e49da37cf2e988a94da83108ce8f",
+    "iso_path": "D:\\home\\downloads\\windows\\win-2019-1909.iso",
+    "guest_additions_mode": "attach",
+    "headless": "false",
+    "autounattend": "answer_files/win2019dc/Autounattend.xml",
+    "template": "windows-2019-standard",
+    "memory_size": "4096",
+    "cpu_cores": "2",
+    "disk_size": "61440",
+    "ps_provisioner": ". { iwr -useb https://raw.githubusercontent.com/theprotos/cookbooks-generic/development/scripts/win.ps1 } | iex; apply-runlist -runlist win-server-minimal.json,win-kms.json -branch development"
+  },
+  "builders": [
+    {
+      "type": "vmware-iso",
+      "vmx_data": {
+        "memsize": "{{ user `memory_size` }}",
+        "numvcpus": "{{ user `cpu_cores` }}",
+        "scsi0.virtualDev": "lsisas1068",
+        "scsi0.present": "TRUE"
+      },
+      "guest_os_type": "windows9srv-64",
+      "headless": "{{ user `headless` }}",
+      "iso_url": "{{ user `iso_path` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "sha1",
+      "output_directory": "{{user `artifacts_path`}}/packer-{{user `template`}}-vmware",
+      "communicator": "winrm",
+      "winrm_username": "vagrant",
+      "winrm_password": "vagrant",
+      "winrm_timeout": "12h",
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "shutdown_timeout": "15m",
+      "floppy_files": [
+        "{{user `autounattend`}}",
+        "scripts/base_setup.ps1"
+      ]
+    },
+    {
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        ["storagectl", "{{.Name}}", "--name", "IDE Controller", "--remove"],
+        ["setextradata", "{{.Name}}", "GUI/HidLedsSync", "1"],
+        ["modifyvm", "{{.Name}}", "--vrde", "off"],
+        ["modifyvm", "{{.Name}}", "--graphicscontroller", "vboxsvga"],
+        ["modifyvm", "{{.Name}}", "--vram", "128"],
+        ["modifyvm", "{{.Name}}", "--accelerate3d", "on"],
+        ["modifyvm", "{{.Name}}", "--usb", "on"],
+        ["modifyvm", "{{.Name}}", "--mouse", "usbtablet"],
+        ["modifyvm", "{{.Name}}", "--audio", "none"],
+        ["modifyvm", "{{.Name}}", "--clipboard-mode", "bidirectional"],
+        ["modifyvm", "{{.Name}}", "--draganddrop", "bidirectional"],
+        ["modifyvm", "{{.Name}}", "--nested-hw-virt", "on"]
+      ],
+      "cpus": "{{ user `cpu_cores` }}",
+      "memory": "{{ user `memory_size` }}",
+      "guest_additions_mode": "{{ user `guest_additions_mode` }}",
+      "guest_additions_interface": "sata",
+      "guest_os_type": "Windows2019_64",
+      "disk_size": "{{user `disk_size`}}",
+      "hard_drive_interface": "sata",
+      "headless": "{{ user `headless` }}",
+      "iso_url": "{{ user `iso_path` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "sha1",
+      "iso_interface": "sata",
+      "output_directory": "{{user `artifacts_path`}}/packer-{{user `template`}}-virtualbox",
+      "communicator": "winrm",
+      "winrm_username": "vagrant",
+      "winrm_password": "vagrant",
+      "winrm_timeout": "4h",
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "shutdown_timeout": "15m",
+      "floppy_files": [
+        "{{user `autounattend`}}",
+        "scripts/base_setup.ps1"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "powershell",
+      "inline": ["{{user `ps_provisioner`}}"],
+      "elevated_user": "vagrant",
+      "elevated_password": "vagrant",
+      "valid_exit_codes": [ 0, 1 ]
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "10m"
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "vagrant",
+        "keep_input_artifact": false,
+        "compression_level": 9,
+        "output": "package.box",
+        "vagrantfile_template": "vagrantfile-windows.template"
+      }
+    ]
+  ]
+}

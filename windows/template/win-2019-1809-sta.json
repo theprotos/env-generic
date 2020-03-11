@@ -1,18 +1,18 @@
 {
   "variables": {
-    "meta_img_name": "win-2019-1809",
-    "meta_img_desc": "Windows Server 2019 build 1809 with preinstalled packages",
+    "meta_img_name": "win-2019-1809-sta",
+    "meta_img_desc": "Windows Server Standard 2019 build 1809 with preinstalled packages",
     "artifacts_path": "boxes",
     "iso_checksum": "520948cc11701f2eeb3da65fd55a2e033edd4662",
     "iso_path": "D:\\home\\downloads\\windows\\win-2019-1809.iso",
     "guest_additions_mode": "attach",
     "headless": "false",
-    "autounattend": "answer_files/win2019standard/Autounattend.xml",
+    "autounattend": "answer_files/win2019sta/Autounattend.xml",
     "template": "windows-2019-standard",
     "memory_size": "4096",
     "cpu_cores": "2",
     "disk_size": "61440",
-    "ps_provisioner": ". { iwr -useb https://raw.githubusercontent.com/theprotos/cookbooks-generic/development/scripts/win.ps1 } | iex; apply-runlist -runlist win-server-minimal.json -branch development"
+    "ps_provisioner": ". { iwr -useb https://raw.githubusercontent.com/theprotos/cookbooks-generic/development/scripts/win.ps1 } | iex; apply-runlist -runlist win-server-minimal.json,win-kms.json -branch development"
   },
   "builders": [
     {

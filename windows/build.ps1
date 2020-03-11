@@ -3,8 +3,8 @@ new-module -name Build-WinImage -scriptblock {
     ##Requires -RunAsAdministrator
 
     <#
-        .\build.ps1 | show-help
-        .\build.ps1 | build-image -packerConfig .\template\win-2019-1809.json
+        .\build.ps1 | iex; show-help
+        .\build.ps1 | iex; build-image -packerConfig .\template\win-2019-1909-dc.json
      #>
      #>
 
@@ -24,12 +24,16 @@ new-module -name Build-WinImage -scriptblock {
             build.ps1 [-imageVersion <version>] [-packerConfig <config.json>] [-imageName <win-2019>] [-imageDescription <win image>]
 
             Available windows configs: $(
-        if (Test-Path -Path template -IsValid){
+        if (Test-Path -Path template -ErrorAction SilentlyContinue){
         Get-ChildItem template\*.json  -ErrorAction SilentlyContinue | foreach { "`n`t`t" + $_.name }
         } else {
-            '   `nwin-10-1903.json
-                win-2019-1809.json
-                win-2019-1909.json
+            '
+                win-10-1903-ent.json
+                win-10-1909-ent.json
+                win-2019-1809-dc.json
+                win-2019-1809-sta.json
+                win-2019-1909-dc.json
+                win-2019-1909-sta.json
 
             '
         }
@@ -118,6 +122,6 @@ function Build-Image {
         cd ..
 }
 
-    export-modulemember -function 'Build-Image' #-alias 'build-image'
-    export-modulemember -function 'Show-Help' #-alias 'get-help'
+    Export-ModuleMember -function 'Build-Image' #-alias 'build-image'
+    Export-ModuleMember -function 'Show-Help' #-alias 'get-help'
 }}

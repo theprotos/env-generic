@@ -24,7 +24,7 @@ ssh vagrant@host
 
 ### Packer: create image
 
-- Update below parameters in respective windows/template/*.json  
+- Update below parameters with respective windows/template/*.json  
 ```
 "autounattend": "answer_files/win10ent/Autounattend.xml",
 "iso_checksum": "34887592ECC25B725A527748D31971F22C78C82B",
@@ -33,17 +33,17 @@ ssh vagrant@host
 
 - [OPTION 1] Manual run  
 ```
+cd windows\template
 packer build --force -on-error=abort -only=virtualbox-iso  .\win-10-1903.json
 packer build  -only=virtualbox-iso -var 'iso_path=D:\\home\\downloads\\windows10\\windows10.iso' -var 'iso_checksum=34887592ECC25B725A527748D31971F22C78C82B' .\win-10-1903.json
 ```
 
-- [OPTION 2] Automated run [build.ps1](windows/template/build.ps1)
-
+- [OPTION 2] Automated run [build.ps1](windows/template/build.ps1)  
 ```
 # Run below to get help
-.\build.ps1 -help
+.\build.ps1 | iex; show-help
 
-.\build.ps1 -imageVersion 1.2.3.4 -packerConfig .\template\win10workstation.json -imageName win-2019 -imageDescription 'basic win image'
+.\build.ps1 | iex; build-image -imageVersion 1.2.3.4 -packerConfig .\template\win10workstation.json -imageName win-2019 -imageDescription 'basic win image'
 
 ```
 
