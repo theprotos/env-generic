@@ -8,7 +8,7 @@ awsvault="https://github.com/99designs/aws-vault/releases/latest/download/aws-va
 direnv="https://github.com/direnv/direnv/releases/latest/download/direnv.linux-amd64"
 vault="https://releases.hashicorp.com/vault/1.1.5/vault_1.1.5_linux_amd64.zip"
 helm="https://get.helm.sh/helm-v3.0.0-linux-amd64.tar.gz"
-minikube="https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64"
+#minikube="https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64"
 #####################################################
 
 printf "    ========[ MOTD: Update ]========\n"
@@ -28,25 +28,10 @@ printf "    ========[ SSH: allow password ]========"
 sed -i "/^[^#]*PasswordAuthentication[[:space:]]no/c\PasswordAuthentication yes" /etc/ssh/sshd_config
 service sshd restart
 
-echo "fs.inotify.max_user_watches=524288" | sudo tee -a /etc/sysctl.conf
-echo "vagrant ALL=(ALL) NOPASSWD: ALL" | sudo tee -a
+echo "vagrant ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers.d/vagrant
 
 printf "    ========[ YUM: Install common packages ]========"
-curl -s https://raw.githubusercontent.com/theprotos/cookbooks-generic/master/scripts/linux.sh | sudo bash /dev/stdin linux-packages.json
-#yum install -y -q -e 0 epel-release
-yum update -y -q -e 0
-yum install -y -q -e 0 sshuttle htop git mc nano ansible golang bash-completion
-
-printf "    ========[ YUM: Install and configure Docker ]========"
-yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-yum-config-manager --enable docker-ce-edge
-yum install -y docker-ce docker-compose docker-machine
-systemctl enable docker
-systemctl start docker
-usermod -aG docker vagrant
-usermod -aG vboxsf vagrant
-setenforce 0
-setenforce Permissive
+curl -sL https://raw.githubusercontent.com/theprotos/cookbooks-generic/development/scripts/linux.sh | sudo bash -s apply linux-packages.json,linux-docker.json development
 
 pip3 install -q pre-commit
 
@@ -60,7 +45,7 @@ function bin_install {
 bin_install $tfdocs terraform-docs
 bin_install $awsvault aws-vault
 bin_install $direnv direnv
-bin_install $minikube minikube
+#bin_install $minikube minikube
 
 function bin_install_zip {
     printf "    ========[ Install $1 ]========"
