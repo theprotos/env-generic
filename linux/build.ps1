@@ -32,6 +32,7 @@ function Vagrant-Cleanup
     Write-Host "$( Get-Date -Format 'yyyy-MM-dd HH:mm' ) ========[ Vagrant: Clean up ]========"
     Remove-Item -force -recurse -ErrorAction SilentlyContinue metadata.json
     Remove-Item -force -recurse -ErrorAction SilentlyContinue package.box
+    vagrant box prune
 }
 
 # Init

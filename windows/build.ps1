@@ -55,6 +55,7 @@ new-module -name Build-WinImage -scriptblock {
         Remove-Item -force -recurse -ErrorAction SilentlyContinue package.box
         Remove-Item -force -recurse -ErrorAction SilentlyContinue boxes\*
         Remove-Item -force -recurse -ErrorAction SilentlyContinue packer_cache\*
+        vagrant box prune
     }
 
     function Add-Vagrant() {
