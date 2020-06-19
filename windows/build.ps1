@@ -6,7 +6,6 @@ new-module -name Build-WinImage -scriptblock {
         .\build.ps1 | iex; show-help
         .\build.ps1 | iex; build-image -packerConfig .\template\win-2019-1909-dc.json
      #>
-     #>
 
     function Show-Help {
         <#
@@ -24,9 +23,10 @@ new-module -name Build-WinImage -scriptblock {
             build.ps1 [-imageVersion <version>] [-packerConfig <config.json>] [-imageName <win-2019>] [-imageDescription <win image>]
 
             Available windows configs: $(
-        if (Test-Path -Path template -ErrorAction SilentlyContinue){
-        Get-ChildItem template\*.json  -ErrorAction SilentlyContinue | foreach { "`n`t`t" + $_.name }
-        } else {
+        if (Test-Path -Path template -ErrorAction SilentlyContinue) {
+            Get-ChildItem template\*.json  -ErrorAction SilentlyContinue | foreach { "`n`t`t" + $_.name }
+        }
+        else {
             '
                 win-10-1903-ent.json
                 win-10-1909-ent.json
@@ -99,30 +99,31 @@ new-module -name Build-WinImage -scriptblock {
         packer build --force -only=virtualbox-iso (split-Path $packerConfig -leaf)
     }
 
-function Build-Image {
+    function Build-Image {
 
-    Param(
-        $imageVersion = (Get-Date -Format "yyyy.MMdd.HHmm" -ErrorAction SilentlyContinue),
-        $packerConfig = "template\win10workstation.json",
-        $imageName = (((Get-Content $packerConfig -Raw -ErrorAction SilentlyContinue) | ConvertFrom-Json).psobject.properties.Value.meta_img_name),
-        $imageDescription = (((Get-Content $packerConfig -Raw -ErrorAction SilentlyContinue) | ConvertFrom-Json).psobject.properties.Value.meta_img_desc)
-    )
+        Param(
+            $imageVersion = (Get-Date -Format "yyyy.MMdd.HHmm" -ErrorAction SilentlyContinue),
+            $packerConfig = "template\win10workstation.json",
+            $imageName = (((Get-Content $packerConfig -Raw -ErrorAction SilentlyContinue) | ConvertFrom-Json).psobject.properties.Value.meta_img_name),
+            $imageDescription = (((Get-Content $packerConfig -Raw -ErrorAction SilentlyContinue) | ConvertFrom-Json).psobject.properties.Value.meta_img_desc)
+        )
 
-    cd template
-    try {
-        Build-Packer $packerConfig
-        Add-Vagrant -imageVersion $imageVersion -imageName $imageName -imageDescription $imageDescription
+        cd template
+        try {
+            Build-Packer $packerConfig
+            Add-Vagrant -imageVersion $imageVersion -imageName $imageName -imageDescription $imageDescription
 
+        }
+        catch {
+            Write-Error "$( $_.exception.message )"
+            throw $_.exception
+        }
+        finally {
+            Cleanup-Packer
+            cd ..
+        }
+
+        Export-ModuleMember -function 'Build-Image' -alias 'build-image'
+        Export-ModuleMember -function 'Show-Help' #-alias 'get-help'
     }
-    catch {
-        Write-Error "$( $_.exception.message )"
-        throw $_.exception
-    }
-    finally {
-        Cleanup-Packer
-        cd ..
 }
-
-    Export-ModuleMember -function 'Build-Image' #-alias 'build-image'
-    Export-ModuleMember -function 'Show-Help' #-alias 'get-help'
-}}

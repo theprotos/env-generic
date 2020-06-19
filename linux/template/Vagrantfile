@@ -10,7 +10,7 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "centos/7"
   config.vm.hostname = HOSTNAME
-
+  #config.vm.box_check_update = false
   config.vm.provider :virtualbox do |vb|
     #vb.gui = true
     #vb.name = HOSTNAME
@@ -23,7 +23,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  #config.vm.network "private_network", ip: "192.168.200.200"
 
   #config.vm.provision "shell", inline: "bootstrap-template.sh"
   config.vm.provision "shell", path: "bootstrap-template.sh"

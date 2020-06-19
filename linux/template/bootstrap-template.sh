@@ -13,6 +13,7 @@ awsvault="https://github.com/99designs/aws-vault/releases/latest/download/aws-va
 
 printf "$(date +%T) ========[ YUM: Install common packages ]========"
 curl -sL https://raw.githubusercontent.com/theprotos/cookbooks-generic/development/scripts/linux.sh | sudo bash -s apply linux-vagrant.json,linux-k8s.json development
+curl -sL https://raw.githubusercontent.com/theprotos/cookbooks-generic/development/scripts/linux.sh | sudo bash -s apply linux-vagrant.json,linux-k8s.json development
 
 pip3 install -q pre-commit
 
