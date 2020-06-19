@@ -1,18 +1,18 @@
 {
   "variables": {
-    "meta_img_name": "win-2019-1909-dc",
-    "meta_img_desc": "Windows Server Datacenter 2019 build 1909 with preinstalled packages",
+    "meta_img_name": "win-10-2004-ent",
+    "meta_img_desc": "Windows 10 Enterprise build 2004 with preinstalled packages",
     "artifacts_path": "boxes",
-    "iso_checksum": "9b1396e1efe6e49da37cf2e988a94da83108ce8f",
-    "iso_path": "D:\\home\\downloads\\windows\\win-2019-1909.iso",
+    "iso_checksum": "04B3FAADEBD3629C53A3BBFFF6148D7B71AB3C3C",
+    "iso_path": "D:\\home\\downloads\\windows\\win-10-2004.iso",
     "guest_additions_mode": "attach",
     "headless": "false",
-    "autounattend": "answer_files/win2019dc/Autounattend.xml",
-    "template": "windows-2019-standard",
+    "autounattend": "answer_files/win10ent/Autounattend.xml",
+    "template": "windows-10",
     "memory_size": "4096",
     "cpu_cores": "2",
     "disk_size": "61440",
-    "ps_provisioner": ". { iwr -useb https://raw.githubusercontent.com/theprotos/cookbooks-generic/development/scripts/win.ps1 } | iex; apply-runlist -runlist win-server-minimal.json,win-kms.json,win-sshd.json -branch development"
+    "ps_provisioner": ". { iwr -useb https://raw.githubusercontent.com/theprotos/cookbooks-generic/development/scripts/win.ps1 } | iex; apply-runlist -runlist win-vm-minimal.json,win-kms.json,win-sshd.json -branch development"
   },
   "builders": [
     {
@@ -59,7 +59,7 @@
       "memory": "{{ user `memory_size` }}",
       "guest_additions_mode": "{{ user `guest_additions_mode` }}",
       "guest_additions_interface": "sata",
-      "guest_os_type": "Windows2019_64",
+      "guest_os_type": "Windows10_64",
       "disk_size": "{{user `disk_size`}}",
       "hard_drive_interface": "sata",
       "headless": "{{ user `headless` }}",

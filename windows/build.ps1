@@ -20,7 +20,7 @@ new-module -name Build-WinImage -scriptblock {
             Build vagrant image for Windows OS
 
         USAGE DESCRIPTION
-            build.ps1 [-imageVersion <version>] [-packerConfig <config.json>] [-imageName <win-2019>] [-imageDescription <win image>]
+            command [-imageVersion <version>] [-packerConfig <config.json>] [-imageName <win-2019>] [-imageDescription <win image>]
 
             Available windows configs: $(
         if (Test-Path -Path template -ErrorAction SilentlyContinue) {
@@ -44,7 +44,8 @@ new-module -name Build-WinImage -scriptblock {
                 development
 
         USAGE EXAMPLES:
-            .\build.ps1 | Build-Image -imageVersion 1.2.3.4 -packerConfig .\template\win10workstation.json -imageName win-2019 -imageDescription 'basic win image'
+            .\build.ps1 | iex; Build-Image -imageVersion 1.2.3.4 -packerConfig .\template\win-10-2004-ent.json -imageName win-2019 -imageDescription 'basic win image'
+            .\build.ps1 | iex; Build-Image -packerConfig .\template\win-10-2004-ent.json
 
         "
     }
@@ -62,18 +63,18 @@ new-module -name Build-WinImage -scriptblock {
 
         param(
             [String]
-            $imageVersion = $imageVersion,
+            $imVersion = $imageVersion.trim(),
             [String]
-            $imageName = $imageName,
+            $imName = $imageName.trim(),
             [String]
-            $imageDescription = $imageDescription
+            $imDescription = $imageDescription.trim()
         )
 
         $metadata = "{
-    ""name"": ""$imageName"",
-    ""description"": ""$imageDescription"",
+    ""name"": ""$imName"",
+    ""description"": ""$imDescription"",
     ""versions"": [{
-        ""version"": ""$imageVersion"",
+        ""version"": ""$imVersion"",
         ""providers"": [{
             ""name"": ""virtualbox"",
             ""url"": ""package.box""
@@ -81,7 +82,7 @@ new-module -name Build-WinImage -scriptblock {
     }]
     }"
 
-        Write-Host "$( Get-Date -Format 'yyyy-MM-dd HH:mm' ) ========[ Vagrant: add box $imageName $imageVersion ]========"
+        Write-Host "$( Get-Date -Format 'yyyy-MM-dd HH:mm' ) ========[ Vagrant: add box: $imName ver: $imVersion ]========"
         $metadata | Out-File metadata.json -Encoding ASCII
         vagrant box add metadata.json
 
@@ -103,8 +104,10 @@ new-module -name Build-WinImage -scriptblock {
 
         Param(
             $imageVersion = (Get-Date -Format "yyyy.MMdd.HHmm" -ErrorAction SilentlyContinue),
-            $packerConfig = "template\win10workstation.json",
+            $packerConfig = "template\win-10-2004-ent.json",
+            [String]
             $imageName = (((Get-Content $packerConfig -Raw -ErrorAction SilentlyContinue) | ConvertFrom-Json).psobject.properties.Value.meta_img_name),
+            [String]
             $imageDescription = (((Get-Content $packerConfig -Raw -ErrorAction SilentlyContinue) | ConvertFrom-Json).psobject.properties.Value.meta_img_desc)
         )
 
@@ -123,7 +126,9 @@ new-module -name Build-WinImage -scriptblock {
             cd ..
         }
 
-        Export-ModuleMember -function 'Build-Image' -alias 'build-image'
-        Export-ModuleMember -function 'Show-Help' #-alias 'get-help'
     }
+    Export-ModuleMember -function 'Build-Image' -alias 'build-image'
+    Export-ModuleMember -function 'Show-Help' #-alias 'get-help'
+
+    #show-help
 }
