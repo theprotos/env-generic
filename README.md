@@ -47,8 +47,34 @@ packer build  -only=virtualbox-iso -var 'iso_path=D:\\home\\downloads\\windows10
 
 ```
 
+### Upload to Vagrant Cloud
+```
+# 
+vagrant cloud auth whoami
+
+#
+vagrant cloud auth login
+
+# Create box
+vagrant cloud box create isender/test --private
+vagrant cloud box update isender/test --no-private
+
+vagrant cloud version create isender/test 0.0.1
+
+
+vagrant cloud provider create isender/test virtualbox 0.0.1
+vagrant cloud provider upload isender/test virtualbox 0.0.1 win-10-1903-ent
+
+
+vagrant cloud publish isender/test2 0.0.1 virtualbox
+
+
+```
+
+
+
 # REF
 
+https://github.com/StefanScherer/packer-windows
 [Create/upload vagrant box](https://www.vagrantup.com/docs/vagrant-cloud/boxes/create.html)
-
 [Windows automated setup](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/automate-windows-setup)

@@ -18,13 +18,27 @@ winrm set "winrm/config/service/auth" '@{Basic="true"}'
 
 #Set-NetConnectionProfile -NetworkCategory Public
 
-Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm') ========[ Install Vbox Guest Additions... ]========    "
-# There needs to be Oracle CA (Certificate Authority) certificates installed in order
-# to prevent user intervention popups which will undermine a silent installation.
-cd E:\cert
-.\VBoxCertUtil.exe add-trusted-publisher vbox*.cer --root vbox*.cer
-cd E:\
-.\VBoxWindowsAdditions.exe /S
+if (Test-Path "C:/users/vagrant/VBoxGuestAdditions.iso" -PathType Leaf)
+{
+    Write-Host "$( Get-Date -Format 'yyyy-MM-dd HH:mm' ) ========[ Install Vbox Guest Additions... ]========    "
+    # There needs to be Oracle CA (Certificate Authority) certificates installed in order
+    # to prevent user intervention popups which will undermine a silent installation.
+
+    Mount-DiskImage -ImagePath "C:/users/vagrant/VBoxGuestAdditions.iso"
+    ls
+    #cd E:\cert
+    #.\VBoxCertUtil.exe add-trusted-publisher vbox*.cer --root vbox*.cer
+    #cd E:\
+    #.\VBoxWindowsAdditions.exe /S
+}
+
+if (Test-Path "E:/VBoxWindowsAdditions.exe" -PathType Leaf){
+    Write-Host "$( Get-Date -Format 'yyyy-MM-dd HH:mm' ) ========[ Install Vbox Guest Additions... ]========    "
+    cd E:\cert
+    .\VBoxCertUtil.exe add-trusted-publisher vbox*.cer --root vbox*.cer
+    cd E:\
+    .\VBoxWindowsAdditions.exe /S
+}
 
 Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm') ========[ Disable UAC... ]========    "
 reg ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f
