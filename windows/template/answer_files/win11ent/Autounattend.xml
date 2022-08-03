@@ -53,7 +53,7 @@
                             <!--<Key>/IMAGE/NAME</Key>
                             <Value>Windows 11 Enterprise</Value>-->
                             <Key>/IMAGE/INDEX</Key>
-                            <Value>2</Value>
+                            <Value>3</Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>

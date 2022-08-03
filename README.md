@@ -80,3 +80,4 @@ vagrant cloud publish isender/test2 0.0.1 virtualbox
 https://github.com/StefanScherer/packer-windows
 [Create/upload vagrant box](https://www.vagrantup.com/docs/vagrant-cloud/boxes/create.html)
 [Windows automated setup](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/automate-windows-setup)
+https://github.com/rgl/windows-vagrant

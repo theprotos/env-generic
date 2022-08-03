@@ -36,7 +36,7 @@
                         </ModifyPartition>
                         <ModifyPartition wcm:action="add">
                             <Format>NTFS</Format>
-                            <Label>Windows 10</Label>
+                            <Label>Windows 11</Label>
                             <Letter>C</Letter>
                             <Order>2</Order>
                             <PartitionID>2</PartitionID>
@@ -50,8 +50,10 @@
                 <OSImage>
                     <InstallFrom>
                         <MetaData wcm:action="add">
-                            <Key>/IMAGE/NAME</Key>
-                            <Value>Windows 11 Enterprise N</Value>
+                            <!--<Key>/IMAGE/NAME</Key>
+                            <Value>Windows 11 Enterprise N</Value>-->
+                            <Key>/IMAGE/INDEX</Key>
+                            <Value>4</Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>
@@ -68,6 +70,20 @@
                 <FullName>Vagrant</FullName>
                 <Organization>dev env</Organization>
             </UserData>
+            <RunSynchronous>
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>1</Order>
+                    <Path>reg add HKLM\SYSTEM\Setup\LabConfig /v BypassTPMCheck /t REG_DWORD /d 1</Path>
+                </RunSynchronousCommand>
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>2</Order>
+                    <Path>reg add HKLM\SYSTEM\Setup\LabConfig /v BypassSecureBootCheck /t REG_DWORD /d 1</Path>
+                </RunSynchronousCommand>
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>3</Order>
+                    <Path>reg add HKLM\SYSTEM\Setup\LabConfig /v BypassRAMCheck /t REG_DWORD /d 1</Path>
+                </RunSynchronousCommand>
+            </RunSynchronous>
         </component>
     </settings>
     <settings pass="generalize">
