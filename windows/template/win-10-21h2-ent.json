@@ -1,10 +1,10 @@
 {
   "variables": {
-    "meta_img_name": "win-10-2004-ent",
-    "meta_img_desc": "Windows 10 Enterprise build 2004 with preinstalled packages",
+    "meta_img_name": "win-10-21h2-ent",
+    "meta_img_desc": "Windows 10 Enterprise build 21h2 with preinstalled packages",
     "artifacts_path": "boxes",
-    "iso_checksum": "04B3FAADEBD3629C53A3BBFFF6148D7B71AB3C3C",
-    "iso_path": "D:\\home\\downloads\\windows\\win-10-2004.iso",
+    "iso_checksum": "4e8947f71b762032a961f9062328c6a036cbea1f",
+    "iso_path": "D:\\home\\downloads\\windows\\win-10-21h2.iso",
     "guest_additions_mode": "disable",
     "headless": "false",
     "autounattend": "answer_files/win10ent/Autounattend.xml",

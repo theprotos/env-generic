@@ -1,17 +1,17 @@
 {
   "variables": {
-    "meta_img_name": "win-10-2004-ent",
-    "meta_img_desc": "Windows 10 Enterprise build 2004 with preinstalled packages",
+    "meta_img_name": "win-11-21h1-ent",
+    "meta_img_desc": "Windows 11 Enterprise build 21h1 with preinstalled packages",
     "artifacts_path": "boxes",
-    "iso_checksum": "04B3FAADEBD3629C53A3BBFFF6148D7B71AB3C3C",
-    "iso_path": "D:\\home\\downloads\\windows\\win-10-2004.iso",
+    "iso_checksum": "7d3357ce3f21d2cd81a69877de4339cb43b49a3b",
+    "iso_path": "D:\\home\\downloads\\windows\\win-11-21h2.iso",
     "guest_additions_mode": "disable",
     "headless": "false",
-    "autounattend": "answer_files/win10ent/Autounattend.xml",
+    "autounattend": "answer_files/win11ent/Autounattend.xml",
     "template": "windows-10",
     "memory_size": "4096",
     "cpu_cores": "2",
-    "disk_size": "61440",
+    "disk_size": "66560",
     "ps_provisioner": ". { iwr -useb https://raw.githubusercontent.com/theprotos/cookbooks-generic/development/scripts/win.ps1 } | iex; apply-runlist -runlist win-server-minimal.json,win-kms.json -branch development"
   },
   "builders": [

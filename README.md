@@ -43,6 +43,8 @@ packer build  -only=virtualbox-iso -var 'iso_path=D:\\home\\downloads\\windows10
 # Run below to get help
 .\build.ps1 | iex; show-help
 
+.\build.ps1 | iex; Build-Image -packerConfig .\template\win-10-2004-ent.json
+.\build.ps1 | iex; Build-Image -packerConfig .\template\win-10-21h2-business.json
 .\build.ps1 | iex; build-image -imageVersion 1.2.3.4 -packerConfig .\template\win10workstation.json -imageName win-2019 -imageDescription 'basic win image'
 
 ```
